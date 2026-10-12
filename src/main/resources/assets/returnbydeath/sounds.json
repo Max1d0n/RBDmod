@@ -1,0 +1,14 @@
+{
+  "rewind": {
+    "subtitle": "returnbydeath.subtitle.rewind",
+    "sounds": [
+      "returnbydeath:rewind"
+    ]
+  },
+  "witch_call": {
+    "subtitle": "returnbydeath.subtitle.witch_call",
+    "sounds": [
+      "returnbydeath:witch_call"
+    ]
+  }
+}

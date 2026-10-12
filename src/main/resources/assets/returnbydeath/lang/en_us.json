@@ -1,0 +1,13 @@
+{
+  "itemGroup.returnbydeath": "Example Mod Tab",
+  "block.returnbydeath.example_block": "Example Block",
+  "item.returnbydeath.example_item": "Example Item",
+
+  "returnbydeath.configuration.title": "Return By Death Configs",
+  "returnbydeath.configuration.section.returnbydeath.common.toml": "Return By Death Configs",
+  "returnbydeath.configuration.section.returnbydeath.common.toml.title": "Return By Death Configs",
+  "returnbydeath.configuration.items": "Item List",
+  "returnbydeath.configuration.logDirtBlock": "Log Dirt Block",
+  "returnbydeath.configuration.magicNumberIntroduction": "Magic Number Text",
+  "returnbydeath.configuration.magicNumber": "Magic Number"
+}
