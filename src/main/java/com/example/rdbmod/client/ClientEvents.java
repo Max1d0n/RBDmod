@@ -6,7 +6,6 @@ import com.example.rdbmod.ReturnByDeath;
 import com.example.rdbmod.network.TriggerRollbackPayload;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.api.distmarker.Dist;
@@ -59,7 +58,6 @@ public class ClientEvents {
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
 
-        // 1. Wait for server thread to stop completely
         if (currentState == RollbackState.WAITING_FOR_SERVER_STOP) {
             if (!(mc.screen instanceof RBDTransitionScreen)) {
                 mc.setScreen(new RBDTransitionScreen());
@@ -74,7 +72,6 @@ public class ClientEvents {
                 currentState = RollbackState.RESTORING_FILES;
             }
         }
-        // 2. Restore files from checkpoint
         else if (currentState == RollbackState.RESTORING_FILES) {
             if (targetWorldFolder != null) {
                 Path savesDir = mc.gameDirectory.toPath().resolve("saves").resolve(targetWorldFolder);
@@ -98,15 +95,12 @@ public class ClientEvents {
             }
         }
 
-        // 3. Play sounds post-spawn
         if (mc.level != null && mc.player != null) {
             if (rewindTimer > 0) {
                 rewindTimer--;
                 if (rewindTimer == 0) {
-                    LOGGER.info("[RBD] Playing REWIND sound");
-                    mc.getSoundManager().play(
-                            SimpleSoundInstance.forUI(ReturnByDeath.REWIND_SOUND.get(), 1.0F, 1.0F)
-                    );
+                    LOGGER.info("[RBD] Playing REWIND sound with dynamic volume");
+                    mc.getSoundManager().play(new DynamicRBDSoundInstance(ReturnByDeath.REWIND_SOUND.get()));
                     rewindTimer = -1;
                 }
             }
@@ -114,10 +108,8 @@ public class ClientEvents {
             if (witchCallTimer > 0) {
                 witchCallTimer--;
                 if (witchCallTimer == 0) {
-                    LOGGER.info("[RBD] Playing WITCH CALL sound");
-                    mc.getSoundManager().play(
-                            SimpleSoundInstance.forUI(ReturnByDeath.WITCH_CALL_SOUND.get(), 1.0F, 1.0F)
-                    );
+                    LOGGER.info("[RBD] Playing WITCH CALL sound with dynamic volume");
+                    mc.getSoundManager().play(new DynamicRBDSoundInstance(ReturnByDeath.WITCH_CALL_SOUND.get()));
                     witchCallTimer = -1;
                 }
             }

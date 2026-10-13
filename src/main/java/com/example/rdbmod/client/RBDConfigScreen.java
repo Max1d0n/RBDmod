@@ -2,6 +2,7 @@ package com.example.rdbmod.client;
 
 import com.example.rdbmod.RBDConfig;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
@@ -12,6 +13,7 @@ public class RBDConfigScreen extends Screen {
 
     private final Screen parent;
     private Checkbox enabledCheckbox;
+    private VolumeSlider volumeSlider;
     private EditBox rewindEditBox;
     private EditBox witchCallEditBox;
 
@@ -23,7 +25,7 @@ public class RBDConfigScreen extends Screen {
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int startY = this.height / 4;
+        int startY = this.height / 5;
 
         // 1. "Enable Return by Death" checkbox
         this.enabledCheckbox = Checkbox.builder(Component.literal("Enable Return by Death"), this.font)
@@ -32,29 +34,34 @@ public class RBDConfigScreen extends Screen {
                 .build();
         this.addRenderableWidget(this.enabledCheckbox);
 
-        // 2. Rewind delay text input
-        this.rewindEditBox = new EditBox(this.font, centerX - 100, startY + 40, 200, 20, Component.literal("Rewind Ticks"));
+        // 2. Sound Volume Slider
+        this.volumeSlider = new VolumeSlider(centerX - 100, startY + 30, 200, 20, RBDConfig.SOUND_VOLUME.get());
+        this.addRenderableWidget(this.volumeSlider);
+
+        // 3. Rewind delay text input
+        this.rewindEditBox = new EditBox(this.font, centerX - 100, startY + 80, 200, 20, Component.literal("Rewind Ticks"));
         this.rewindEditBox.setValue(String.valueOf(RBDConfig.REWIND_DELAY_TICKS.get()));
         this.addRenderableWidget(this.rewindEditBox);
 
-        // 3. Witch Call delay text input
-        this.witchCallEditBox = new EditBox(this.font, centerX - 100, startY + 80, 200, 20, Component.literal("Witch Call Ticks"));
+        // 4. Witch Call delay text input
+        this.witchCallEditBox = new EditBox(this.font, centerX - 100, startY + 130, 200, 20, Component.literal("Witch Call Ticks"));
         this.witchCallEditBox.setValue(String.valueOf(RBDConfig.WITCH_CALL_DELAY_TICKS.get()));
         this.addRenderableWidget(this.witchCallEditBox);
 
-        // 4. "Save" button
+        // 5. "Save" button
         this.addRenderableWidget(Button.builder(Component.literal("Save"), button -> saveAndClose())
-                .bounds(centerX - 105, startY + 120, 100, 20)
+                .bounds(centerX - 105, startY + 170, 100, 20)
                 .build());
 
-        // 5. "Cancel" button
+        // 6. "Cancel" button
         this.addRenderableWidget(Button.builder(Component.literal("Cancel"), button -> this.minecraft.setScreen(this.parent))
-                .bounds(centerX + 5, startY + 120, 100, 20)
+                .bounds(centerX + 5, startY + 170, 100, 20)
                 .build());
     }
 
     private void saveAndClose() {
         RBDConfig.ENABLED.set(this.enabledCheckbox.selected());
+        RBDConfig.SOUND_VOLUME.set(this.volumeSlider.getValue());
 
         try {
             int rewind = Integer.parseInt(this.rewindEditBox.getValue());
@@ -75,15 +82,40 @@ public class RBDConfigScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
 
         int centerX = this.width / 2;
-        int startY = this.height / 4;
+        int startY = this.height / 5;
 
         guiGraphics.drawCenteredString(this.font, this.title, centerX, 15, 0xFFFFFF);
-        guiGraphics.drawString(this.font, "Rewind Sound Delay (in ticks, 20 = 1s):", centerX - 100, startY + 28, 0xA0A0A0);
-        guiGraphics.drawString(this.font, "Witch Call Delay (in ticks, 20 = 1s):", centerX - 100, startY + 68, 0xA0A0A0);
+        guiGraphics.drawString(this.font, "Rewind Sound Delay (in ticks, 20 = 1s):", centerX - 100, startY + 68, 0xA0A0A0);
+        guiGraphics.drawString(this.font, "Witch Call Delay (in ticks, 20 = 1s):", centerX - 100, startY + 118, 0xA0A0A0);
     }
 
     @Override
     public void onClose() {
         this.minecraft.setScreen(this.parent);
+    }
+
+    /**
+     * Custom slider component for volume control
+     */
+    private static class VolumeSlider extends AbstractSliderButton {
+
+        public VolumeSlider(int x, int y, int width, int height, double value) {
+            super(x, y, width, height, Component.empty(), value);
+            this.updateMessage();
+        }
+
+        @Override
+        protected void updateMessage() {
+            int percent = (int) (this.value * 100.0);
+            this.setMessage(Component.literal("Sound Volume: " + percent + "%"));
+        }
+
+        @Override
+        protected void applyValue() {
+        }
+
+        public double getValue() {
+            return this.value;
+        }
     }
 }
