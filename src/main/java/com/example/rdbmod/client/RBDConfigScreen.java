@@ -36,16 +36,16 @@ public class RBDConfigScreen extends Screen {
         this.addRenderableWidget(this.enabledCheckbox);
 
         // 2. Sound Volume Slider
-        this.volumeSlider = new VolumeSlider(centerX - 100, startY + 30, 200, 20, RBDConfig.SOUND_VOLUME.get());
+        this.volumeSlider = new VolumeSlider(centerX - 100, startY + 50, 200, 20, RBDConfig.SOUND_VOLUME.get());
         this.addRenderableWidget(this.volumeSlider);
 
         // 3. Rewind delay text input
-        this.rewindEditBox = new EditBox(this.font, centerX - 100, startY + 80, 200, 20, Component.literal("Rewind Ticks"));
+        this.rewindEditBox = new EditBox(this.font, centerX - 100, startY + 95, 200, 20, Component.literal("Rewind Ticks"));
         this.rewindEditBox.setValue(String.valueOf(RBDConfig.REWIND_DELAY_TICKS.get()));
         this.addRenderableWidget(this.rewindEditBox);
 
         // 4. Witch Call delay text input
-        this.witchCallEditBox = new EditBox(this.font, centerX - 100, startY + 130, 200, 20, Component.literal("Witch Call Ticks"));
+        this.witchCallEditBox = new EditBox(this.font, centerX - 100, startY + 145, 200, 20, Component.literal("Witch Call Ticks"));
         this.witchCallEditBox.setValue(String.valueOf(RBDConfig.WITCH_CALL_DELAY_TICKS.get()));
         this.addRenderableWidget(this.witchCallEditBox);
 
@@ -57,12 +57,12 @@ public class RBDConfigScreen extends Screen {
 
         // 5. "Save" button
         this.addRenderableWidget(Button.builder(Component.literal("Save"), button -> saveAndClose())
-                .bounds(centerX - 105, startY + 170, 100, 20)
+                .bounds(centerX - 105, startY + 185, 100, 20)
                 .build());
 
         // 6. "Cancel" button
         this.addRenderableWidget(Button.builder(Component.literal("Cancel"), button -> this.minecraft.setScreen(this.parent))
-                .bounds(centerX + 5, startY + 170, 100, 20)
+                .bounds(centerX + 5, startY + 185, 100, 20)
                 .build());
     }
 
