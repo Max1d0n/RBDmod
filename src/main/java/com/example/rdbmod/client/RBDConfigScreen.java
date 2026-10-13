@@ -16,6 +16,7 @@ public class RBDConfigScreen extends Screen {
     private VolumeSlider volumeSlider;
     private EditBox rewindEditBox;
     private EditBox witchCallEditBox;
+    private Checkbox witchCallCheckbox;
 
     public RBDConfigScreen(Screen parent) {
         super(Component.literal("Return by Death Config"));
@@ -25,7 +26,7 @@ public class RBDConfigScreen extends Screen {
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int startY = this.height / 5;
+        int startY = this.height / 6;
 
         // 1. "Enable Return by Death" checkbox
         this.enabledCheckbox = Checkbox.builder(Component.literal("Enable Return by Death"), this.font)
@@ -47,6 +48,12 @@ public class RBDConfigScreen extends Screen {
         this.witchCallEditBox = new EditBox(this.font, centerX - 100, startY + 130, 200, 20, Component.literal("Witch Call Ticks"));
         this.witchCallEditBox.setValue(String.valueOf(RBDConfig.WITCH_CALL_DELAY_TICKS.get()));
         this.addRenderableWidget(this.witchCallEditBox);
+
+        this.witchCallCheckbox = Checkbox.builder(Component.literal("Enable Witch Call Sound"), this.font)
+                .pos(centerX - 100, startY + 24)
+                .selected(RBDConfig.WITCH_CALL_ENABLED.get())
+                .build();
+        this.addRenderableWidget(this.witchCallCheckbox);
 
         // 5. "Save" button
         this.addRenderableWidget(Button.builder(Component.literal("Save"), button -> saveAndClose())
@@ -94,9 +101,8 @@ public class RBDConfigScreen extends Screen {
         this.minecraft.setScreen(this.parent);
     }
 
-    /**
-     * Custom slider component for volume control
-     */
+     //Custom slider component for volume control
+
     private static class VolumeSlider extends AbstractSliderButton {
 
         public VolumeSlider(int x, int y, int width, int height, double value) {

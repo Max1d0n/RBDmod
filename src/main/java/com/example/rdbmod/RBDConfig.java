@@ -22,5 +22,9 @@ public class RBDConfig {
             .comment("Delay for playing Witch Call sound (in ticks, 160 ticks = 8 sec)")
             .defineInRange("witchCallDelayTicks", 160, 0, 1200);
 
+    public static final ModConfigSpec.BooleanValue WITCH_CALL_ENABLED = BUILDER
+            .comment("Enables or disables the Witch Call sound effect after respawn")
+            .define("witchCallEnabled", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 }
